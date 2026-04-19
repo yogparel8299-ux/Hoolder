@@ -14,7 +14,9 @@ export async function createAgent(formData: FormData) {
   const system_prompt = String(formData.get("system_prompt") || "").trim();
   const monthly_budget_usd = Number(formData.get("monthly_budget_usd") || 0);
 
-  if (!company_id || !name || !role) throw new Error("Missing required fields");
+  if (!company_id || !name || !role) {
+    throw new Error("Missing required fields");
+  }
 
   const { data, error } = await supabase
     .from("agents")
@@ -32,5 +34,6 @@ export async function createAgent(formData: FormData) {
     .single();
 
   if (error) throw error;
+
   return data;
 }
