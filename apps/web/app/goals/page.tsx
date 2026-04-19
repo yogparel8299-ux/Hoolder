@@ -1,6 +1,6 @@
-import { createGoal } from "@/actions/goals";
-import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { createGoal } from "../../actions/goals";
+import { createClient } from "../../lib/supabase/server";
+import { requireUser } from "../../lib/auth";
 
 export default async function GoalsPage() {
   await requireUser();
