@@ -1,6 +1,6 @@
-import { createAgent } from "@/actions/agents";
-import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { createAgent } from "../../actions/agents";
+import { createClient } from "../../lib/supabase/server";
+import { requireUser } from "../../lib/auth";
 
 export default async function AgentsPage() {
   await requireUser();
