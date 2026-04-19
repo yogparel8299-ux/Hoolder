@@ -1,6 +1,6 @@
-import { createSwarm } from "@/actions/swarms";
-import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { createSwarm } from "../../actions/swarms";
+import { createClient } from "../../lib/supabase/server";
+import { requireUser } from "../../lib/auth";
 
 export default async function SwarmsPage() {
   await requireUser();
