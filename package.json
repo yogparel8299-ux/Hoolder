@@ -1,0 +1,16 @@
+{
+  "name": "hoolder",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace apps/web run dev",
+    "build:web": "npm --workspace apps/web run build",
+    "start:web": "npm --workspace apps/web run start",
+    "dev:worker": "npm --workspace services/worker run dev",
+    "start:worker": "npm --workspace services/worker run start"
+  }
+}
