@@ -1,6 +1,6 @@
-import { createCompany } from "@/actions/companies";
-import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { createCompany } from "../../actions/companies";
+import { createClient } from "../../lib/supabase/server";
+import { requireUser } from "../../lib/auth";
 
 export default async function CompaniesPage() {
   await requireUser();
