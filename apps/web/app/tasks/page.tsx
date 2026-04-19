@@ -1,6 +1,6 @@
-import { assignTask, createTask } from "@/actions/tasks";
-import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { assignTask, createTask } from "../../actions/tasks";
+import { createClient } from "../../lib/supabase/server";
+import { requireUser } from "../../lib/auth";
 
 export default async function TasksPage() {
   await requireUser();
