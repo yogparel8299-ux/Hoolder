@@ -1,0 +1,17 @@
+{
+  "name": "worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node --loader tsx src/index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.49.8",
+    "openai": "4.86.1"
+  },
+  "devDependencies": {
+    "tsx": "4.19.3",
+    "typescript": "5.8.2"
+  }
+}
