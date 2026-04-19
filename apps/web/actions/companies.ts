@@ -1,7 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { slugify } from "@hoolder/shared/utils";
+import { createClient } from "../lib/supabase/server";
+import { slugify } from "../../../packages/shared/src/utils";
 
 export async function createCompany(formData: FormData) {
   const supabase = await createClient();
