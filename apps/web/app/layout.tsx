@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Sidebar } from "@/components/shell/sidebar";
+import { Sidebar } from "../components/shell/sidebar";
 
 export const metadata = {
   title: "Hoolder",
