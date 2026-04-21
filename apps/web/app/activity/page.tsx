@@ -4,7 +4,11 @@ import { requireUser } from "../../lib/auth";
 export default async function ActivityPage() {
   await requireUser();
   const supabase = await createClient();
-  const { data: logs } = await supabase.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(100);
+  const { data: logs } = await supabase
+    .from("activity_logs")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   return (
     <div className="container">
