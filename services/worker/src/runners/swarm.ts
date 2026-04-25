@@ -44,30 +44,36 @@ export async function runSwarmTask(assignment: any) {
       totalInput += result.tokens_input;
       totalOutput += result.tokens_output;
 
-      pieces.push(`Agent: ${agent.name}
-Role: ${agent.role}
-
-${result.output}`);
+      pieces.push(
+        [
+          `Agent: ${agent.name}`,
+          `Role: ${agent.role}`,
+          "",
+          result.output
+        ].join("\n")
+      );
     }
 
-    const merged = pieces.join("
-
----
-
-") || `Swarm completed task: ${task.title}`;
+    const merged =
+      pieces.length > 0
+        ? pieces.join("\n\n---\n\n")
+        : `Swarm completed task: ${task.title}`;
 
     await supabaseAdmin.from("task_outputs").insert({
       task_run_id: run.id,
       output_text: merged
     });
 
-    await supabaseAdmin.from("task_runs").update({
-      status: task.requires_approval ? "awaiting_approval" : "completed",
-      finished_at: new Date().toISOString(),
-      tokens_input: totalInput,
-      tokens_output: totalOutput,
-      estimated_cost_usd: 0
-    }).eq("id", run.id);
+    await supabaseAdmin
+      .from("task_runs")
+      .update({
+        status: task.requires_approval ? "awaiting_approval" : "completed",
+        finished_at: new Date().toISOString(),
+        tokens_input: totalInput,
+        tokens_output: totalOutput,
+        estimated_cost_usd: 0
+      })
+      .eq("id", run.id);
 
     if (task.requires_approval) {
       await supabaseAdmin.from("approvals").insert({
@@ -75,17 +81,30 @@ ${result.output}`);
         status: "pending"
       });
 
-      await supabaseAdmin.from("tasks").update({ status: "awaiting_approval" }).eq("id", task.id);
+      await supabaseAdmin
+        .from("tasks")
+        .update({ status: "awaiting_approval" })
+        .eq("id", task.id);
     } else {
-      await supabaseAdmin.from("tasks").update({ status: "completed" }).eq("id", task.id);
+      await supabaseAdmin
+        .from("tasks")
+        .update({ status: "completed" })
+        .eq("id", task.id);
     }
   } catch (error) {
-    await supabaseAdmin.from("task_runs").update({
-      status: "failed",
-      finished_at: new Date().toISOString()
-    }).eq("id", run.id);
+    await supabaseAdmin
+      .from("task_runs")
+      .update({
+        status: "failed",
+        finished_at: new Date().toISOString()
+      })
+      .eq("id", run.id);
 
-    await supabaseAdmin.from("tasks").update({ status: "failed" }).eq("id", task.id);
+    await supabaseAdmin
+      .from("tasks")
+      .update({ status: "failed" })
+      .eq("id", task.id);
+
     throw error;
   }
 }
