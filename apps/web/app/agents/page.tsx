@@ -1,12 +1,19 @@
+import { cookies } from "next/headers";
 import { createAgent } from "../../actions/agents";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
 
 export default async function AgentsPage() {
   await requireUser();
+  const cookieStore = cookies();
+  const company_id = cookieStore.get("company_id")?.value;
   const supabase = await createClient();
   const { data: companies } = await supabase.from("companies").select("id,name");
-  const { data: agents } = await supabase.from("agents").select("*").order("created_at", { ascending: false });
+  const { data: agents } = await supabase
+  .from("agents")
+  .select("*")
+  .eq("company_id", company_id)
+  .order("created_at", { ascending: false });
 
   return (
     <div className="container">
