@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createClient } from "../../../lib/supabase/server";
 import { requireUser } from "../../../lib/auth";
 
-export default async function TaskDetailPage({ params }: { params: { id: string } }) {
+export default async function TaskDetailPage({ params }: any) {
   await requireUser();
   const supabase = await createClient();
 
