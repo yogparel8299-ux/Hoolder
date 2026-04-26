@@ -1,4 +1,4 @@
-import { assignTask, createTask } from "../../actions/tasks";
+import { assignTask, createTask, deleteTask, resetTask } from "../../actions/tasks";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
 
@@ -9,7 +9,10 @@ export default async function TasksPage() {
   const { data: companies } = await supabase.from("companies").select("id,name");
   const { data: agents } = await supabase.from("agents").select("id,name");
   const { data: swarms } = await supabase.from("swarms").select("id,name");
-  const { data: tasks } = await supabase.from("tasks").select("*").order("created_at", { ascending: false });
+  const { data: tasks } = await supabase
+    .from("tasks")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   return (
     <div className="container">
@@ -94,6 +97,22 @@ export default async function TasksPage() {
               <p>{task.description || "No description"}</p>
               <p>Status: {task.status}</p>
               <p>Priority: {task.priority}</p>
+
+              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                <form action={resetTask}>
+                  <input type="hidden" name="task_id" value={task.id} />
+                  <button className="button" type="submit">
+                    Reset
+                  </button>
+                </form>
+
+                <form action={deleteTask}>
+                  <input type="hidden" name="task_id" value={task.id} />
+                  <button className="button" type="submit">
+                    Delete
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>
