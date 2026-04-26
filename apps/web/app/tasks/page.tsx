@@ -99,7 +99,11 @@ export default async function TasksPage() {
               <p>Status: {task.status}</p>
               <p>Priority: {task.priority}</p>
 
-              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+                <Link className="button" href={`/tasks/${task.id}`}>
+                  View details
+                </Link>
+
                 <form action={resetTask}>
                   <input type="hidden" name="task_id" value={task.id} />
                   <button className="button" type="submit">
@@ -116,6 +120,13 @@ export default async function TasksPage() {
               </div>
             </div>
           ))}
+
+          {!tasks?.length ? (
+            <div className="card">
+              <h3>No tasks yet</h3>
+              <p>Create your first task to assign work to an agent.</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
