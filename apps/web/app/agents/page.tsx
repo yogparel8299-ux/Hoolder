@@ -5,7 +5,7 @@ import { requireUser } from "../../lib/auth";
 
 export default async function AgentsPage() {
   await requireUser();
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const company_id = cookieStore.get("company_id")?.value;
   const supabase = await createClient();
   const { data: companies } = await supabase.from("companies").select("id,name");
