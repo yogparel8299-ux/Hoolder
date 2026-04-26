@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { assignTask, createTask, deleteTask, resetTask } from "../../actions/tasks";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
