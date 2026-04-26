@@ -1,7 +1,3 @@
 export default function AgentsPage() {
-  return (
-    <div>
-      <h1>Agents page working</h1>
-    </div>
-  );
+  return <h1>Agents page working</h1>;
 }
