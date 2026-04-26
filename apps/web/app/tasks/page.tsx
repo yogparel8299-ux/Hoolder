@@ -20,13 +20,15 @@ export default async function TasksPage() {
           <form action={createTask} className="card grid">
             <h3>Create task</h3>
 
-            <select className="select" name="company_id">
-              {(companies || []).map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+            <select className="select" name="company_id" required>
+              {(companies || []).map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
               ))}
             </select>
 
-            <input className="input" name="title" placeholder="Task title" />
+            <input className="input" name="title" placeholder="Task title" required />
             <textarea className="textarea" name="description" placeholder="Task description" />
 
             <select className="select" name="priority">
@@ -40,15 +42,19 @@ export default async function TasksPage() {
               <option value="false">No approval</option>
             </select>
 
-            <button className="button" type="submit">Create task</button>
+            <button className="button" type="submit">
+              Create task
+            </button>
           </form>
 
           <form action={assignTask} className="card grid">
             <h3>Assign task</h3>
 
-            <select className="select" name="task_id">
-              {(tasks || []).map((t) => (
-                <option key={t.id} value={t.id}>{t.title}</option>
+            <select className="select" name="task_id" required>
+              {(tasks || []).map((task) => (
+                <option key={task.id} value={task.id}>
+                  {task.title}
+                </option>
               ))}
             </select>
 
@@ -59,19 +65,25 @@ export default async function TasksPage() {
 
             <select className="select" name="agent_id">
               <option value="">Choose agent</option>
-              {(agents || []).map((a) => (
-                <option key={a.id} value={a.id}>{a.name}</option>
+              {(agents || []).map((agent) => (
+                <option key={agent.id} value={agent.id}>
+                  {agent.name}
+                </option>
               ))}
             </select>
 
             <select className="select" name="swarm_id">
               <option value="">Choose swarm</option>
-              {(swarms || []).map((s) => (
-                <option key={s.id} value={s.id}>{s.name}</option>
+              {(swarms || []).map((swarm) => (
+                <option key={swarm.id} value={swarm.id}>
+                  {swarm.name}
+                </option>
               ))}
             </select>
 
-            <button className="button" type="submit">Assign task</button>
+            <button className="button" type="submit">
+              Assign task
+            </button>
           </form>
         </div>
 
@@ -81,6 +93,7 @@ export default async function TasksPage() {
               <h3>{task.title}</h3>
               <p>{task.description || "No description"}</p>
               <p>Status: {task.status}</p>
+              <p>Priority: {task.priority}</p>
             </div>
           ))}
         </div>
