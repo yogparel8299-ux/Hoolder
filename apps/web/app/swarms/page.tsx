@@ -1,4 +1,4 @@
-import { createSwarm } from "../../actions/swarms";
+import { addSwarmMember, createSwarm, removeSwarmMember } from "../../actions/swarms";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
 
@@ -8,7 +8,21 @@ export default async function SwarmsPage() {
 
   const { data: companies } = await supabase.from("companies").select("id,name");
   const { data: agents } = await supabase.from("agents").select("id,name");
-  const { data: swarms } = await supabase.from("swarms").select("*").order("created_at", { ascending: false });
+
+  const { data: swarms } = await supabase
+    .from("swarms")
+    .select(`
+      id,
+      name,
+      objective,
+      topology,
+      swarm_members (
+        agent_id,
+        role,
+        agents (id, name)
+      )
+    `)
+    .order("created_at", { ascending: false });
 
   return (
     <div className="container">
@@ -28,26 +42,55 @@ export default async function SwarmsPage() {
           <textarea className="textarea" name="objective" placeholder="Objective" />
 
           <select className="select" name="topology">
-            <option value="hierarchy">Hierarchy</option>
             <option value="mesh">Mesh</option>
+            <option value="hierarchy">Hierarchy</option>
           </select>
 
-          <select className="select" name="leader_agent_id">
-            <option value="">No leader</option>
-            {(agents || []).map((a) => (
-              <option key={a.id} value={a.id}>{a.name}</option>
-            ))}
-          </select>
-
-          <button className="button" type="submit">Create swarm</button>
+          <button className="button" type="submit">
+            Create swarm
+          </button>
         </form>
 
         <div className="grid">
-          {(swarms || []).map((swarm) => (
+          {(swarms || []).map((swarm: any) => (
             <div key={swarm.id} className="card">
               <h3>{swarm.name}</h3>
               <p>{swarm.objective || "No objective"}</p>
-              <p>{swarm.topology}</p>
+
+              <h4 style={{ marginTop: 12 }}>Members</h4>
+
+              {(swarm.swarm_members || []).map((m: any) => (
+                <div key={m.agent_id} style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span>{m.agents?.name}</span>
+
+                  <form action={removeSwarmMember}>
+                    <input type="hidden" name="swarm_id" value={swarm.id} />
+                    <input type="hidden" name="agent_id" value={m.agent_id} />
+                    <button className="button" type="submit">
+                      Remove
+                    </button>
+                  </form>
+                </div>
+              ))}
+
+              <form action={addSwarmMember} style={{ marginTop: 12 }}>
+                <input type="hidden" name="swarm_id" value={swarm.id} />
+
+                <select className="select" name="agent_id">
+                  {(agents || []).map((a) => (
+                    <option key={a.id} value={a.id}>{a.name}</option>
+                  ))}
+                </select>
+
+                <select className="select" name="role">
+                  <option value="member">Member</option>
+                  <option value="leader">Leader</option>
+                </select>
+
+                <button className="button" type="submit">
+                  Add member
+                </button>
+              </form>
             </div>
           ))}
         </div>
