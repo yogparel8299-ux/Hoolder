@@ -1,6 +1,12 @@
 import "./globals.css";
 import { Sidebar } from "../components/shell/sidebar";
+import { CompanySelector } from "../components/company-selector";
 import { createClient } from "../lib/supabase/server";
+
+export const metadata = {
+  title: "Hoolder",
+  description: "AI company operating system"
+};
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -10,29 +16,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     .select("id, name");
 
   return (
-    <html>
+    <html lang="en">
       <body>
-        <div style={{ display: "flex" }}>
+        <div className="layout-shell">
           <Sidebar />
-
-          <div style={{ padding: "20px", width: "100%" }}>
-            <div style={{ marginBottom: "20px" }}>
-              <select
-                onChange={(e) => {
-                  document.cookie = `company_id=${e.target.value}; path=/`;
-                  window.location.reload();
-                }}
-              >
-                {(companies || []).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
+          <main className="main-shell">
+            <div className="container">
+              <div style={{ marginBottom: 20, maxWidth: 320 }}>
+                <CompanySelector companies={companies || []} />
+              </div>
+              {children}
             </div>
-
-            {children}
-          </div>
+          </main>
         </div>
       </body>
     </html>
