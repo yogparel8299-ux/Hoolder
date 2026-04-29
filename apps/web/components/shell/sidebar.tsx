@@ -8,6 +8,7 @@ const links = [
   ["Swarms", "/swarms"],
   ["Approvals", "/approvals"],
   ["Datasets", "/datasets"],
+  ["Team", "/team"],
   ["Pricing", "/pricing"]
 ];
 
