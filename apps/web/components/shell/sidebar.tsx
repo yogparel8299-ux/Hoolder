@@ -1,27 +1,34 @@
 import Link from "next/link";
 
+const links = [
+  ["Dashboard", "/dashboard"],
+  ["Companies", "/companies"],
+  ["Agents", "/agents"],
+  ["Tasks", "/tasks"],
+  ["Swarms", "/swarms"],
+  ["Approvals", "/approvals"],
+  ["Datasets", "/datasets"],
+  ["Pricing", "/pricing"]
+];
+
 export function Sidebar() {
   return (
-    <div
-      style={{
-        width: 220,
-        height: "100vh",
-        background: "#0f0f12",
-        padding: 20,
-        borderRight: "1px solid #1f1f23"
-      }}
-    >
-      <h2 style={{ marginBottom: 20 }}>Hoolder</h2>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/companies">Companies</Link>
-        <Link href="/agents">Agents</Link>
-        <Link href="/tasks">Tasks</Link>
-        <Link href="/swarms">Swarms</Link>
-        <Link href="/approvals">Approvals</Link>
-        <Link href="/pricing">Pricing</Link>
+    <aside className="sidebar">
+      <div className="brand">
+        <div className="brand-mark" />
+        <div>
+          <div className="brand-title">Hoolder</div>
+          <div className="brand-subtitle">AI company OS</div>
+        </div>
       </div>
-    </div>
+
+      <nav className="nav">
+        {links.map(([label, href]) => (
+          <Link key={href} href={href} className="nav-link">
+            {label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
   );
 }
