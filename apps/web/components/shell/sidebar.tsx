@@ -10,6 +10,7 @@ const links = [
   ["Datasets", "/datasets"],
   ["Team", "/team"],
   ["Usage", "/usage"],
+  ["Billing", "/billing"],
   ["Pricing", "/pricing"]
 ];
 
