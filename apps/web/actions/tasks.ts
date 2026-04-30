@@ -2,13 +2,77 @@
 
 import { createClient } from "../lib/supabase/server";
 
+function getPeriodKey() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
+async function getUserPlanAndUsage(supabase: any, userId: string) {
+  let { data: userPlan } = await supabase
+    .from("user_plans")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!userPlan) {
+    const inserted = await supabase
+      .from("user_plans")
+      .insert({
+        user_id: userId,
+        plan_name: "free",
+        status: "active"
+      })
+      .select()
+      .single();
+
+    userPlan = inserted.data;
+  }
+
+  const { data: plan } = await supabase
+    .from("plans")
+    .select("*")
+    .eq("name", userPlan.plan_name)
+    .single();
+
+  const period_key = getPeriodKey();
+
+  let { data: usage } = await supabase
+    .from("monthly_usage")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("period_key", period_key)
+    .maybeSingle();
+
+  if (!usage) {
+    const insertedUsage = await supabase
+      .from("monthly_usage")
+      .insert({
+        user_id: userId,
+        period_key
+      })
+      .select()
+      .single();
+
+    usage = insertedUsage.data;
+  }
+
+  return { plan, usage };
+}
+
 export async function createTask(formData: FormData) {
   const supabase = await createClient();
+
   const {
     data: { user }
   } = await supabase.auth.getUser();
 
   if (!user) throw new Error("Not authenticated");
+
+  const { plan, usage } = await getUserPlanAndUsage(supabase, user.id);
+
+  if (usage.tasks_used >= plan.tasks_limit) {
+    throw new Error("Task limit reached. Upgrade your plan to create more tasks.");
+  }
 
   const company_id = String(formData.get("company_id") || "");
   const goal_id = String(formData.get("goal_id") || "");
@@ -37,6 +101,13 @@ export async function createTask(formData: FormData) {
     .single();
 
   if (error) throw error;
+
+  await supabase
+    .from("monthly_usage")
+    .update({
+      tasks_used: usage.tasks_used + 1
+    })
+    .eq("id", usage.id);
 
   return data;
 }
