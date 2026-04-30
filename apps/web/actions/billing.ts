@@ -52,7 +52,6 @@ export async function ensureSubscription() {
     .single();
 
   if (error) throw error;
-
   return data;
 }
 
@@ -82,17 +81,9 @@ export async function requestPlanUpgrade(formData: FormData) {
     metadata: {
       plan_name,
       country_code,
-      message:
-        "Checkout integration placeholder. Connect Razorpay/Stripe/Paddle webhook later."
+      message: "Checkout integration placeholder."
     }
   });
-
-  return {
-    plan_name,
-    provider_name,
-    amount_inr,
-    message: `Upgrade request created. Payment provider: ${provider_name}`
-  };
 }
 
 export async function activatePlanManually(formData: FormData) {
@@ -134,9 +125,8 @@ export async function activatePlanManually(formData: FormData) {
       .eq("id", subscription.id);
   }
 
-  await supabase
-    .from("user_plans")
-    .upsert({
+  await supabase.from("user_plans").upsert(
+    {
       user_id: user.id,
       plan_name,
       status: "active",
@@ -144,9 +134,11 @@ export async function activatePlanManually(formData: FormData) {
       current_period_end: new Date(
         Date.now() + 30 * 24 * 60 * 60 * 1000
       ).toISOString()
-    }, {
+    },
+    {
       onConflict: "user_id"
-    });
+    }
+  );
 
   await supabase.from("billing_events").insert({
     user_id: user.id,
