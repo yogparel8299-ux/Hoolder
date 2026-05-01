@@ -11,6 +11,7 @@ const links = [
   ["Team", "/team"],
   ["Usage", "/usage"],
   ["Billing", "/billing"],
+  ["Settings", "/settings"],
   ["Pricing", "/pricing"]
 ];
 
