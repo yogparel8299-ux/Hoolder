@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
 
@@ -5,38 +6,91 @@ export default async function DashboardPage() {
   await requireUser();
   const supabase = await createClient();
 
-  const { data: companies } = await supabase.from("companies").select("id");
-  const { data: agents } = await supabase.from("agents").select("id");
-  const { data: tasks } = await supabase.from("tasks").select("status");
+  const { data: tasks } = await supabase
+    .from("tasks")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(5);
 
-  const totalCompanies = companies?.length || 0;
-  const totalAgents = agents?.length || 0;
-  const totalTasks = tasks?.length || 0;
-  const runningTasks = tasks?.filter((t) => t.status === "running").length || 0;
+  const { data: agents } = await supabase
+    .from("agents")
+    .select("*")
+    .limit(5);
 
   return (
     <div className="container">
-      <h1>Dashboard</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-kicker">Dashboard</div>
+          <h1>Operate your AI company</h1>
+          <p>Start by creating agents, tasks, or swarms.</p>
+        </div>
+      </div>
 
+      {/* QUICK ACTIONS */}
       <div className="grid grid-4">
-        <div className="card">
-          <h3>Companies</h3>
-          <p>{totalCompanies}</p>
-        </div>
+        <Link href="/companies" className="card">
+          <h3>Create Company</h3>
+          <p>Start a new AI workspace</p>
+        </Link>
 
-        <div className="card">
-          <h3>Agents</h3>
-          <p>{totalAgents}</p>
-        </div>
+        <Link href="/agents" className="card">
+          <h3>Create Agent</h3>
+          <p>Define roles and prompts</p>
+        </Link>
 
-        <div className="card">
-          <h3>Total Tasks</h3>
-          <p>{totalTasks}</p>
-        </div>
+        <Link href="/tasks" className="card">
+          <h3>Create Task</h3>
+          <p>Give work to agents</p>
+        </Link>
 
-        <div className="card">
-          <h3>Running</h3>
-          <p>{runningTasks}</p>
+        <Link href="/swarms" className="card">
+          <h3>Create Swarm</h3>
+          <p>Group multiple agents</p>
+        </Link>
+      </div>
+
+      {/* RECENT TASKS */}
+      <div style={{ marginTop: 28 }}>
+        <h2>Recent Tasks</h2>
+
+        <div className="grid">
+          {(tasks || []).map((task) => (
+            <Link
+              key={task.id}
+              href={`/tasks/${task.id}`}
+              className="card"
+            >
+              <h3>{task.title}</h3>
+              <p>Status: {task.status}</p>
+            </Link>
+          ))}
+
+          {!tasks?.length && (
+            <div className="card">
+              <p>No tasks yet</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* AGENTS */}
+      <div style={{ marginTop: 28 }}>
+        <h2>Your Agents</h2>
+
+        <div className="grid">
+          {(agents || []).map((agent) => (
+            <div key={agent.id} className="card">
+              <h3>{agent.name}</h3>
+              <p>{agent.role}</p>
+            </div>
+          ))}
+
+          {!agents?.length && (
+            <div className="card">
+              <p>No agents created</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
