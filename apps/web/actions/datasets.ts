@@ -19,6 +19,9 @@ export async function createDataset(formData: FormData) {
   const license_type = String(formData.get("license_type") || "standard");
   const sample_text = String(formData.get("sample_text") || "").trim();
   const file_url = String(formData.get("file_url") || "").trim();
+  const storage_path = String(formData.get("storage_path") || "").trim();
+  const file_name = String(formData.get("file_name") || "").trim();
+  const file_size_bytes = Number(formData.get("file_size_bytes") || 0);
 
   if (!title || !description || !category) {
     throw new Error("Missing required fields");
@@ -36,6 +39,9 @@ export async function createDataset(formData: FormData) {
       license_type,
       sample_text: sample_text || null,
       file_url: file_url || null,
+      storage_path: storage_path || null,
+      file_name: file_name || null,
+      file_size_bytes: file_size_bytes || null,
       status: "active"
     })
     .select()
@@ -61,7 +67,7 @@ export async function createDatasetOrder(formData: FormData) {
     throw new Error("Invalid dataset order");
   }
 
-  const platform_fee_inr = Math.round(amount_inr * 0.1);
+  const platform_fee_inr = Math.round(amount_inr * 0.15);
   const seller_earning_inr = amount_inr - platform_fee_inr;
 
   const { data, error } = await supabase
