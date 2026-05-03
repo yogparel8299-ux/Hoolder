@@ -17,12 +17,18 @@ export default async function TasksPage() {
 
   return (
     <div className="container">
-      <h1>Tasks</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-kicker">Tasks</div>
+          <h1>Create, assign, reset and delete AI work.</h1>
+          <p>Create a task, assign it to an agent or swarm, then review the output.</p>
+        </div>
+      </div>
 
       <div className="grid grid-2">
         <div className="grid">
           <form action={createTask} className="card grid">
-            <h3>Create task</h3>
+            <h2>Create task</h2>
 
             <select className="select" name="company_id" required>
               {(companies || []).map((company) => (
@@ -36,9 +42,9 @@ export default async function TasksPage() {
             <textarea className="textarea" name="description" placeholder="Task description" />
 
             <select className="select" name="priority">
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="low">Low</option>
+              <option value="medium">Medium priority</option>
+              <option value="high">High priority</option>
+              <option value="low">Low priority</option>
             </select>
 
             <select className="select" name="requires_approval">
@@ -52,7 +58,7 @@ export default async function TasksPage() {
           </form>
 
           <form action={assignTask} className="card grid">
-            <h3>Assign task</h3>
+            <h2>Assign task</h2>
 
             <select className="select" name="task_id" required>
               {(tasks || []).map((task) => (
@@ -94,12 +100,12 @@ export default async function TasksPage() {
         <div className="grid">
           {(tasks || []).map((task) => (
             <div key={task.id} className="card">
-              <h3>{task.title}</h3>
-              <p>{task.description || "No description"}</p>
-              <p>Status: {task.status}</p>
+              <span className="badge">{task.status}</span>
+              <h2 style={{ marginTop: 14 }}>{task.title}</h2>
+              <p>{task.description || "No description added."}</p>
               <p>Priority: {task.priority}</p>
 
-              <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 16 }}>
                 <Link className="button" href={`/tasks/${task.id}`}>
                   View details
                 </Link>
@@ -123,8 +129,9 @@ export default async function TasksPage() {
 
           {!tasks?.length ? (
             <div className="card">
-              <h3>No tasks yet</h3>
-              <p>Create your first task to assign work to an agent.</p>
+              <h2>No tasks yet</h2>
+              <p>Create your first task, then assign it to an agent or swarm.</p>
+              <p>Flow: create agent → create task → assign task → review output.</p>
             </div>
           ) : null}
         </div>
