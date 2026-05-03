@@ -61,7 +61,9 @@ export default async function TaskDetailPage({ params }: any) {
         <div className="page-kicker">Task Detail</div>
         <h1>{task.title}</h1>
         <p>{task.description || "No description"}</p>
-        <p>Status: {task.status}</p>
+        <p>
+  Status: <span className="badge">{task.status}</span>
+</p>
         <p>Priority: {task.priority}</p>
       </div>
 
