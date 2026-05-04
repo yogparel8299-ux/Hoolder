@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createClient } from "../lib/supabase/server";
 
 const planPrices: Record<string, number> = {
@@ -16,10 +17,8 @@ function pickProvider(countryCode: string) {
   if (code === "IN") return "razorpay";
   if (["US", "GB", "CA", "AU"].includes(code)) return "stripe";
   if (["DE", "FR", "IT", "ES", "NL"].includes(code)) return "stripe";
-  if (code === "BR") return "mercado_pago";
-  if (["NG", "ZA", "GH", "KE"].includes(code)) return "paystack";
 
-  return "paddle";
+  return "stripe";
 }
 
 export async function ensureSubscription() {
@@ -55,35 +54,16 @@ export async function ensureSubscription() {
   return data;
 }
 
-export async function requestPlanUpgrade(formData: FormData) {
-  const supabase = await createClient();
-
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) throw new Error("Not authenticated");
-
+export async function startCheckout(formData: FormData) {
   const plan_name = String(formData.get("plan_name") || "starter");
   const country_code = String(formData.get("country_code") || "IN").toUpperCase();
+  const provider = pickProvider(country_code);
 
-  const provider_name = pickProvider(country_code);
-  const amount_inr = planPrices[plan_name] || 0;
+  if (provider === "razorpay") {
+    redirect(`/api/checkout/razorpay?plan=${plan_name}&country=${country_code}`);
+  }
 
-  const subscription = await ensureSubscription();
-
-  await supabase.from("billing_events").insert({
-    user_id: user.id,
-    subscription_id: subscription.id,
-    event_type: "upgrade_requested",
-    provider_name,
-    amount_inr,
-    metadata: {
-      plan_name,
-      country_code,
-      message: "Checkout integration placeholder."
-    }
-  });
+  redirect(`/api/checkout/stripe?plan=${plan_name}&country=${country_code}`);
 }
 
 export async function activatePlanManually(formData: FormData) {
@@ -97,33 +77,18 @@ export async function activatePlanManually(formData: FormData) {
 
   const plan_name = String(formData.get("plan_name") || "free");
 
-  const { data: subscription } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const subscription = await ensureSubscription();
 
-  if (!subscription) {
-    await supabase.from("subscriptions").insert({
-      user_id: user.id,
+  await supabase
+    .from("subscriptions")
+    .update({
       plan_name,
       status: "active",
       provider_name: "manual",
-      country_code: "IN"
-    });
-  } else {
-    await supabase
-      .from("subscriptions")
-      .update({
-        plan_name,
-        status: "active",
-        current_period_start: new Date().toISOString(),
-        current_period_end: new Date(
-          Date.now() + 30 * 24 * 60 * 60 * 1000
-        ).toISOString()
-      })
-      .eq("id", subscription.id);
-  }
+      current_period_start: new Date().toISOString(),
+      current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    })
+    .eq("id", subscription.id);
 
   await supabase.from("user_plans").upsert(
     {
@@ -131,21 +96,18 @@ export async function activatePlanManually(formData: FormData) {
       plan_name,
       status: "active",
       current_period_start: new Date().toISOString(),
-      current_period_end: new Date(
-        Date.now() + 30 * 24 * 60 * 60 * 1000
-      ).toISOString()
+      current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     },
-    {
-      onConflict: "user_id"
-    }
+    { onConflict: "user_id" }
   );
 
   await supabase.from("billing_events").insert({
     user_id: user.id,
-    subscription_id: subscription?.id || null,
+    subscription_id: subscription.id,
     event_type: "manual_plan_activation",
     provider_name: "manual",
     amount_inr: planPrices[plan_name] || 0,
+    status: "paid",
     metadata: { plan_name }
   });
 }
