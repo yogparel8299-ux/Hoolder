@@ -1,8 +1,4 @@
-import {
-  activatePlanManually,
-  ensureSubscription,
-  requestPlanUpgrade
-} from "../../actions/billing";
+import { activatePlanManually, ensureSubscription, startCheckout } from "../../actions/billing";
 import { createClient } from "../../lib/supabase/server";
 import { requireUser } from "../../lib/auth";
 
@@ -11,28 +7,28 @@ const plans = [
     name: "free",
     label: "Free",
     price: "₹0",
-    desc: "Try Hoolder without burning platform cost.",
+    desc: "Try Hoolder with hard limits.",
     features: ["25 tasks/month", "3 agents", "1 swarm", "15% dataset fee"]
   },
   {
     name: "starter",
     label: "Starter",
     price: "₹999/mo",
-    desc: "For solo founders and early users.",
+    desc: "Best for solo founders.",
     features: ["300 tasks/month", "10 agents", "5 swarms", "12% dataset fee"]
   },
   {
     name: "growth",
     label: "Growth",
     price: "₹2,999/mo",
-    desc: "For startups using agents daily.",
+    desc: "Best for startups.",
     features: ["1,500 tasks/month", "30 agents", "20 swarms", "10% dataset fee"]
   },
   {
     name: "pro",
     label: "Pro",
     price: "₹9,999/mo",
-    desc: "For serious AI operations.",
+    desc: "Best for heavy users and BYOK.",
     features: ["10,000 tasks/month", "100 agents", "BYOK", "5% dataset fee"]
   }
 ];
@@ -56,21 +52,14 @@ export default async function BillingPage() {
     .order("created_at", { ascending: false })
     .limit(10);
 
-  const { data: providers } = await supabase
-    .from("payment_providers")
-    .select("*")
-    .order("country_code", { ascending: true });
-
   return (
     <div className="container">
       <div className="page-header">
         <div>
           <div className="page-kicker">Billing</div>
-          <h1>Global billing, local payment providers.</h1>
+          <h1>Upgrade with local or global checkout.</h1>
           <p>
-            Hoolder can route Indian users to Razorpay, US/EU users to Stripe,
-            Brazil users to Mercado Pago, African users to Paystack, and global
-            users to Paddle or Lemon Squeezy.
+            India routes to Razorpay. US/EU/global routes to Stripe. Your plan activates after webhook payment confirmation.
           </p>
         </div>
 
@@ -92,22 +81,22 @@ export default async function BillingPage() {
               ))}
             </ul>
 
-            <form action={requestPlanUpgrade} className="grid" style={{ marginTop: 16 }}>
-              <input type="hidden" name="plan_name" value={plan.name} />
+            {plan.name !== "free" ? (
+              <form action={startCheckout} className="grid" style={{ marginTop: 16 }}>
+                <input type="hidden" name="plan_name" value={plan.name} />
 
-              <select className="select" name="country_code" defaultValue="IN">
-                <option value="IN">India — Razorpay/Cashfree</option>
-                <option value="US">United States — Stripe</option>
-                <option value="GB">United Kingdom — Stripe</option>
-                <option value="BR">Brazil — Mercado Pago</option>
-                <option value="NG">Nigeria — Paystack</option>
-                <option value="GLOBAL">Global — Paddle</option>
-              </select>
+                <select className="select" name="country_code" defaultValue="IN">
+                  <option value="IN">India — Razorpay</option>
+                  <option value="US">United States — Stripe</option>
+                  <option value="GB">United Kingdom — Stripe</option>
+                  <option value="GLOBAL">Global — Stripe</option>
+                </select>
 
-              <button className="button" type="submit">
-                Request upgrade
-              </button>
-            </form>
+                <button className="button" type="submit">
+                  Checkout
+                </button>
+              </form>
+            ) : null}
 
             <form action={activatePlanManually} style={{ marginTop: 10 }}>
               <input type="hidden" name="plan_name" value={plan.name} />
@@ -129,12 +118,9 @@ export default async function BillingPage() {
         </div>
 
         <div className="card">
-          <h2>Supported Providers</h2>
-          {(providers || []).map((provider) => (
-            <p key={provider.id}>
-              {provider.country_code}: {provider.provider_name}
-            </p>
-          ))}
+          <h2>Setup required</h2>
+          <p>Razorpay needs KEY_ID, KEY_SECRET, WEBHOOK_SECRET.</p>
+          <p>Stripe needs SECRET_KEY, WEBHOOK_SECRET and plan price IDs.</p>
         </div>
       </div>
 
@@ -145,13 +131,12 @@ export default async function BillingPage() {
           <div key={event.id} style={{ borderTop: "1px solid var(--border)", paddingTop: 12, marginTop: 12 }}>
             <p>Event: {event.event_type}</p>
             <p>Provider: {event.provider_name || "manual"}</p>
-            <p>Amount: ₹{Number(event.amount_inr || 0).toFixed(0)}</p>
+            <p>Status: {event.status || "created"}</p>
+            {event.checkout_url ? <p>Checkout: {event.checkout_url}</p> : null}
           </div>
         ))}
 
-        {!events?.length ? (
-          <p>No billing events yet.</p>
-        ) : null}
+        {!events?.length ? <p>No billing events yet.</p> : null}
       </div>
     </div>
   );
