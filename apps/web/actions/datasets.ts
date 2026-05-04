@@ -63,7 +63,7 @@ export async function createDatasetOrder(formData: FormData) {
   const dataset_id = String(formData.get("dataset_id") || "");
   const amount_inr = Number(formData.get("amount_inr") || 0);
 
-  if (!dataset_id || amount_inr <= 0) {
+  if (!dataset_id || amount_inr < 0) {
     throw new Error("Invalid dataset order");
   }
 
@@ -78,7 +78,9 @@ export async function createDatasetOrder(formData: FormData) {
       amount_inr,
       platform_fee_inr,
       seller_earning_inr,
-      payment_status: "pending"
+      payment_status: amount_inr === 0 ? "paid" : "demo_paid",
+      access_granted: true,
+      paid_at: new Date().toISOString()
     })
     .select()
     .single();
