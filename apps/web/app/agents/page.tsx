@@ -17,6 +17,11 @@ export default async function AgentsPage() {
         id,
         skill_name,
         skill_type
+      ),
+      agent_memories (
+        id,
+        memory_text,
+        created_at
       )
     `)
     .order("created_at", { ascending: false });
@@ -26,10 +31,9 @@ export default async function AgentsPage() {
       <div className="page-header">
         <div>
           <div className="page-kicker">Agents</div>
-          <h1>Create AI workers with skills.</h1>
+          <h1>Create AI workers with skills and memory.</h1>
           <p>
-            Give agents roles, models, budgets and skills like coding, spreadsheets,
-            research, sales, finance, SQL, or email writing.
+            Agents can remember previous outputs and use that memory in future tasks.
           </p>
         </div>
       </div>
@@ -126,13 +130,27 @@ export default async function AgentsPage() {
                   Add skill
                 </button>
               </form>
+
+              <h3 style={{ marginTop: 22 }}>Memory</h3>
+
+              <div className="grid">
+                {(agent.agent_memories || []).slice(0, 3).map((memory: any) => (
+                  <div key={memory.id} className="card">
+                    <p>{memory.memory_text}</p>
+                  </div>
+                ))}
+
+                {!agent.agent_memories?.length ? (
+                  <p>No memory yet. Memory appears after successful task runs.</p>
+                ) : null}
+              </div>
             </div>
           ))}
 
           {!agents?.length ? (
             <div className="card">
               <h3>No agents yet</h3>
-              <p>Create your first agent, then add skills to make it useful.</p>
+              <p>Create your first agent, then add skills and run tasks.</p>
             </div>
           ) : null}
         </div>
