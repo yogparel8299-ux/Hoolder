@@ -7,6 +7,7 @@ export async function runOpenAI(input: {
   title: string;
   description?: string | null;
   model: string;
+  memory?: string | null;
 }) {
   const apiKey = input.apiKey || process.env.OPENAI_API_KEY;
 
@@ -21,9 +22,12 @@ export async function runOpenAI(input: {
     input: [
       {
         role: "system",
-        content:
-          input.systemPrompt ||
-          `You are a helpful AI agent. Your role is: ${input.role}.`
+        content: `
+${input.systemPrompt || `You are a helpful AI agent. Your role is: ${input.role}.`}
+
+Relevant memory from previous work:
+${input.memory || "No prior memory available."}
+        `
       },
       {
         role: "user",
