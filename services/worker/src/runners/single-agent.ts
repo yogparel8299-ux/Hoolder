@@ -15,6 +15,21 @@ async function getUserProviderKey(userId: string, providerName: string) {
   return data?.api_key || null;
 }
 
+async function getAgentMemory(agentId: string) {
+  const { data } = await supabaseAdmin
+    .from("agent_memories")
+    .select("memory_text")
+    .eq("agent_id", agentId)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  return (data || []).map((m) => `- ${m.memory_text}`).join("\n");
+}
+
+function trimMemory(text: string) {
+  return text.length > 1200 ? `${text.slice(0, 1200)}...` : text;
+}
+
 export async function runSingleAgentTask(assignment: any) {
   const task = assignment.tasks;
 
@@ -48,6 +63,7 @@ export async function runSingleAgentTask(assignment: any) {
 
   try {
     const userKey = await getUserProviderKey(task.created_by, agent.provider);
+    const memory = await getAgentMemory(agent.id);
 
     const result = await runOpenAI({
       apiKey: userKey,
@@ -55,12 +71,21 @@ export async function runSingleAgentTask(assignment: any) {
       role: agent.role,
       title: task.title,
       description: task.description,
-      model: agent.model
+      model: agent.model,
+      memory
     });
 
     await supabaseAdmin.from("task_outputs").insert({
       task_run_id: run.id,
       output_text: result.output
+    });
+
+    await supabaseAdmin.from("agent_memories").insert({
+      agent_id: agent.id,
+      task_id: task.id,
+      memory_text: trimMemory(result.output),
+      memory_type: "task_output",
+      importance: 1
     });
 
     await supabaseAdmin
@@ -102,12 +127,10 @@ export async function runSingleAgentTask(assignment: any) {
         .eq("id", task.id);
     }
   } catch (error: any) {
-    await supabaseAdmin
-      .from("task_outputs")
-      .insert({
-        task_run_id: run.id,
-        output_text: `Execution failed: ${error?.message || "Unknown error"}`
-      });
+    await supabaseAdmin.from("task_outputs").insert({
+      task_run_id: run.id,
+      output_text: `Execution failed: ${error?.message || "Unknown error"}`
+    });
 
     await supabaseAdmin
       .from("task_runs")
