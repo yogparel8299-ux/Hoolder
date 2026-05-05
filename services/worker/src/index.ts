@@ -1,21 +1,53 @@
-import { getClaimableAssignments, claimTask } from "./claim";
+import "dotenv/config";
+
+import { supabaseAdmin } from "./db";
 import { runSingleAgentTask } from "./runners/single-agent";
 import { runSwarmTask } from "./runners/swarm";
+import { processDueSchedules } from "./schedules";
 
 async function tick() {
-  const assignments = await getClaimableAssignments();
+  await processDueSchedules();
 
-  for (const assignment of assignments) {
-    const task = assignment.tasks;
-    if (!task?.id) continue;
+  const { data: assignments, error } = await supabaseAdmin
+    .from("task_assignments")
+    .select("*, tasks(*)")
+    .eq("status", "queued")
+    .limit(5);
 
-    const claimed = await claimTask(task.id);
-    if (!claimed) continue;
+  if (error) {
+    console.error("Worker fetch failed", error);
+    return;
+  }
 
-    if (assignment.assignment_type === "agent") {
-      await runSingleAgentTask(assignment);
-    } else {
-      await runSwarmTask(assignment);
+  for (const assignment of assignments || []) {
+    try {
+      await supabaseAdmin
+        .from("task_assignments")
+        .update({ status: "running" })
+        .eq("id", assignment.id);
+
+      await supabaseAdmin
+        .from("tasks")
+        .update({ status: "running", claimed_at: new Date().toISOString() })
+        .eq("id", assignment.task_id);
+
+      if (assignment.assignment_type === "swarm") {
+        await runSwarmTask(assignment);
+      } else {
+        await runSingleAgentTask(assignment);
+      }
+
+      await supabaseAdmin
+        .from("task_assignments")
+        .update({ status: "completed" })
+        .eq("id", assignment.id);
+    } catch (error) {
+      console.error("Worker tick failed", error);
+
+      await supabaseAdmin
+        .from("task_assignments")
+        .update({ status: "failed" })
+        .eq("id", assignment.id);
     }
   }
 }
@@ -24,17 +56,9 @@ async function main() {
   console.log("Hoolder worker started");
 
   while (true) {
-    try {
-      await tick();
-    } catch (error) {
-      console.error("Worker tick failed", error);
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, 8000));
+    await tick();
+    await new Promise((resolve) => setTimeout(resolve, 10000));
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+main();
