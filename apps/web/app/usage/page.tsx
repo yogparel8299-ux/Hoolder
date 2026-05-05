@@ -7,6 +7,29 @@ function getPeriodKey() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
 
+function Bar({ percent, color }: { percent: number; color: string }) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: 12,
+        background: "rgba(255,255,255,0.08)",
+        borderRadius: 999,
+        overflow: "hidden",
+        marginTop: 14
+      }}
+    >
+      <div
+        style={{
+          width: `${percent}%`,
+          height: "100%",
+          background: color
+        }}
+      />
+    </div>
+  );
+}
+
 export default async function UsagePage() {
   const user = await requireUser();
   await ensureUserPlan();
@@ -36,6 +59,8 @@ export default async function UsagePage() {
 
   const tasksUsed = usage?.tasks_used || 0;
   const tokensUsed = usage?.tokens_used || 0;
+  const runsUsed = usage?.runs_used || 0;
+  const blockedRuns = usage?.blocked_runs || 0;
 
   const taskPercent = Math.min(100, Math.round((tasksUsed / plan.tasks_limit) * 100));
   const tokenPercent = Math.min(100, Math.round((tokensUsed / plan.token_limit) * 100));
@@ -44,10 +69,10 @@ export default async function UsagePage() {
     <div className="container">
       <div className="page-header">
         <div>
-          <div className="page-kicker">Usage & Limits</div>
-          <h1>Control AI cost before it controls you.</h1>
+          <div className="page-kicker">Usage Protection</div>
+          <h1>Hard limits protect your wallet.</h1>
           <p>
-            Hoolder uses hard limits to keep free users attractive but profitable.
+            Hoolder blocks execution when users hit plan limits, so AI cost never runs unlimited.
           </p>
         </div>
 
@@ -56,83 +81,54 @@ export default async function UsagePage() {
 
       <div className="grid grid-2">
         <div className="card">
-          <h2>Tasks</h2>
-          <p>{tasksUsed} / {plan.tasks_limit} tasks used this month</p>
-
-          <div style={{
-            width: "100%",
-            height: 12,
-            background: "rgba(255,255,255,0.08)",
-            borderRadius: 999,
-            overflow: "hidden",
-            marginTop: 14
-          }}>
-            <div style={{
-              width: `${taskPercent}%`,
-              height: "100%",
-              background: "#34d399"
-            }} />
-          </div>
+          <h2>Task creation</h2>
+          <p>{tasksUsed} / {plan.tasks_limit} tasks created this month</p>
+          <Bar percent={taskPercent} color="#34d399" />
         </div>
 
         <div className="card">
-          <h2>Tokens</h2>
-          <p>{tokensUsed} / {plan.token_limit} token budget used</p>
-
-          <div style={{
-            width: "100%",
-            height: 12,
-            background: "rgba(255,255,255,0.08)",
-            borderRadius: 999,
-            overflow: "hidden",
-            marginTop: 14
-          }}>
-            <div style={{
-              width: `${tokenPercent}%`,
-              height: "100%",
-              background: "#60a5fa"
-            }} />
-          </div>
+          <h2>Token budget</h2>
+          <p>{tokensUsed} / {plan.token_limit} tokens used this month</p>
+          <Bar percent={tokenPercent} color="#60a5fa" />
         </div>
       </div>
 
-      <div className="grid grid-3" style={{ marginTop: 18 }}>
+      <div className="grid grid-4" style={{ marginTop: 18 }}>
         <div className="card">
-          <h3>Companies</h3>
-          <p>Limit: {plan.companies_limit}</p>
+          <h3>Runs used</h3>
+          <h1>{runsUsed}</h1>
         </div>
 
         <div className="card">
-          <h3>Agents</h3>
-          <p>Limit: {plan.agents_limit}</p>
+          <h3>Blocked runs</h3>
+          <h1>{blockedRuns}</h1>
         </div>
 
         <div className="card">
-          <h3>Swarms</h3>
-          <p>Limit: {plan.swarms_limit}</p>
+          <h3>Estimated cost</h3>
+          <h1>${Number(usage?.estimated_cost_usd || 0).toFixed(4)}</h1>
         </div>
 
         <div className="card">
-          <h3>Team Members</h3>
-          <p>Limit: {plan.team_members_limit}</p>
-        </div>
-
-        <div className="card">
-          <h3>Marketplace Fee</h3>
-          <p>{plan.marketplace_fee_percent}% per dataset sale</p>
-        </div>
-
-        <div className="card">
-          <h3>BYOK</h3>
-          <p>{plan.byok_enabled ? "Enabled" : "Not included"}</p>
+          <h3>Marketplace fee</h3>
+          <h1>{plan.marketplace_fee_percent}%</h1>
         </div>
       </div>
 
       <div className="card" style={{ marginTop: 18 }}>
-        <h2>Profit protection logic</h2>
+        <h2>Plan limits</h2>
+        <p>Companies: {plan.companies_limit}</p>
+        <p>Agents: {plan.agents_limit}</p>
+        <p>Swarms: {plan.swarms_limit}</p>
+        <p>Team members: {plan.team_members_limit}</p>
+        <p>BYOK: {plan.byok_enabled ? "Enabled" : "Not included"}</p>
+      </div>
+
+      <div className="card" style={{ marginTop: 18 }}>
+        <h2>Upgrade logic</h2>
         <p>
-          Free users can try Hoolder, but heavy usage is blocked before it burns AI credits.
-          Paid users unlock higher limits. Pro users can bring their own API key.
+          Free users hit value fast but cannot burn unlimited tokens. Paid plans unlock more tasks.
+          Pro users can bring their own API key, shifting heavy AI cost away from Hoolder.
         </p>
       </div>
     </div>
