@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "../db";
 import { runOpenAI } from "../providers/openai";
+import { canRunTask, recordBlockedRun, recordUsage } from "../usage";
 
 async function getUserProviderKey(userId: string, providerName: string) {
   const { data } = await supabaseAdmin
@@ -33,6 +34,13 @@ function trimMemory(text: string) {
 export async function runSingleAgentTask(assignment: any) {
   const task = assignment.tasks;
 
+  const usageCheck = await canRunTask(task);
+
+  if (!usageCheck.allowed) {
+    await recordBlockedRun(task, usageCheck.reason);
+    throw new Error(usageCheck.reason);
+  }
+
   const { data: agent, error: agentError } = await supabaseAdmin
     .from("agents")
     .select("*")
@@ -40,11 +48,7 @@ export async function runSingleAgentTask(assignment: any) {
     .maybeSingle();
 
   if (agentError || !agent) {
-    await supabaseAdmin
-      .from("tasks")
-      .update({ status: "failed" })
-      .eq("id", task.id);
-
+    await supabaseAdmin.from("tasks").update({ status: "failed" }).eq("id", task.id);
     throw new Error("Agent not found");
   }
 
@@ -88,17 +92,6 @@ export async function runSingleAgentTask(assignment: any) {
       importance: 1
     });
 
-    await supabaseAdmin
-      .from("task_runs")
-      .update({
-        status: task.requires_approval ? "awaiting_approval" : "completed",
-        finished_at: new Date().toISOString(),
-        tokens_input: result.tokens_input,
-        tokens_output: result.tokens_output,
-        estimated_cost_usd: result.cost_usd
-      })
-      .eq("id", run.id);
-
     await supabaseAdmin.from("usage_logs").insert({
       company_id: task.company_id,
       agent_id: agent.id,
@@ -110,21 +103,28 @@ export async function runSingleAgentTask(assignment: any) {
       cost_usd: result.cost_usd
     });
 
+    await recordUsage(task, result.tokens_input, result.tokens_output, result.cost_usd);
+
+    await supabaseAdmin
+      .from("task_runs")
+      .update({
+        status: task.requires_approval ? "awaiting_approval" : "completed",
+        finished_at: new Date().toISOString(),
+        tokens_input: result.tokens_input,
+        tokens_output: result.tokens_output,
+        estimated_cost_usd: result.cost_usd
+      })
+      .eq("id", run.id);
+
     if (task.requires_approval) {
       await supabaseAdmin.from("approvals").insert({
         task_run_id: run.id,
         status: "pending"
       });
 
-      await supabaseAdmin
-        .from("tasks")
-        .update({ status: "awaiting_approval" })
-        .eq("id", task.id);
+      await supabaseAdmin.from("tasks").update({ status: "awaiting_approval" }).eq("id", task.id);
     } else {
-      await supabaseAdmin
-        .from("tasks")
-        .update({ status: "completed" })
-        .eq("id", task.id);
+      await supabaseAdmin.from("tasks").update({ status: "completed" }).eq("id", task.id);
     }
   } catch (error: any) {
     await supabaseAdmin.from("task_outputs").insert({
@@ -140,10 +140,7 @@ export async function runSingleAgentTask(assignment: any) {
       })
       .eq("id", run.id);
 
-    await supabaseAdmin
-      .from("tasks")
-      .update({ status: "failed" })
-      .eq("id", task.id);
+    await supabaseAdmin.from("tasks").update({ status: "failed" }).eq("id", task.id);
 
     throw error;
   }
