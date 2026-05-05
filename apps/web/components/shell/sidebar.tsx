@@ -6,6 +6,7 @@ const links = [
   ["Companies", "/companies"],
   ["Agents", "/agents"],
   ["Tasks", "/tasks"],
+  ["Schedules", "/schedules"],
   ["Swarms", "/swarms"],
   ["Approvals", "/approvals"],
   ["Datasets", "/datasets"],
