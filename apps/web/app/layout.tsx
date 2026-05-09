@@ -1,48 +1,58 @@
+import type { Metadata, Viewport } from "next";
+import { Inter, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import { Sidebar } from "../components/shell/sidebar";
 
-export const metadata = {
-  title: "Hoolder",
-  description: "AI company operating system"
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter"
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono"
+});
+
+export const metadata: Metadata = {
+  title: "Hoolder - AI Company Operating System",
+  description:
+    "Run your AI company from one operating system. Manage agents, swarms, tasks, and more.",
+  generator: "Hoolder",
+  icons: {
+    icon: [
+      {
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)"
+      },
+      {
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)"
+      },
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml"
+      }
+    ],
+    apple: "/apple-icon.png"
+  }
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const viewport: Viewport = {
+  themeColor: "#fafaf8",
+  width: "device-width",
+  initialScale: 1
+};
+
+export default function RootLayout({
+  children
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
-      <body>
-        <div className="layout-shell">
-          <Sidebar />
-
-          <main className="main-shell">
-            {children}
-
-            {/* FOOTER START */}
-            <footer
-              style={{
-                marginTop: 60,
-                paddingTop: 20,
-                borderTop: "1px solid rgba(255,255,255,0.08)",
-                display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 12,
-                fontSize: 13,
-                color: "#a1a1aa"
-              }}
-            >
-              <span>© 2026 Hoolder</span>
-
-              <div style={{ display: "flex", gap: 14 }}>
-                <a href="/privacy">Privacy</a>
-                <a href="/terms">Terms</a>
-                <a href="/refund">Refund</a>
-                <a href="/ai-policy">AI Policy</a>
-              </div>
-            </footer>
-            {/* FOOTER END */}
-
-          </main>
-        </div>
+    <html lang="en" className="bg-background">
+      <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased`}>
+        {children}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );
