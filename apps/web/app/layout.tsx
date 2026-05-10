@@ -11,9 +11,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen flex bg-[#fafafa] text-[#1c1c1e]">
-          <Sidebar />
-          <main className="flex-1 min-w-0 p-6 md:p-8">{children}</main>
+        <div className="min-h-screen bg-[#fafafa] text-[#1c1c1e]">
+          {children}
         </div>
       </body>
     </html>
