@@ -1,96 +1,120 @@
-import Link from "next/link";
-
+import Link from 'next/link'
+export const dynamic = "force-static";
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#fbf9fa] text-[#1b1b1d]">
-      {/* Top Navigation */}
-      <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-[#c5c6cc] bg-[#fbf9fa]/90 px-6 backdrop-blur-md md:px-12 xl:px-20">
-        <div className="flex items-center gap-8">
-          <Link
-            href="/"
-            className="text-2xl font-semibold tracking-tight text-[#0a1422]"
-          >
-            Hoolder
-          </Link>
-
-          <nav className="hidden items-center gap-6 md:flex">
-            <a
+    <div className="min-h-screen flex flex-col">
+      {/* Sticky Nav */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e5e5ea]">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-[#1c1c1e] rounded-lg flex items-center justify-center">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" />
+                <path
+                  d="M2 17L12 22L22 17"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M2 12L12 17L22 12"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <span className="font-semibold text-lg tracking-tight">
+              Hoolder
+            </span>
+          </div>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#636366]">
+            <Link
               href="#features"
-              className="border-b-2 border-[#0a1422] pb-1 text-xs font-semibold uppercase tracking-wider text-[#0a1422]"
+              className="hover:text-[#1c1c1e] transition-colors"
             >
               Features
-            </a>
-
-            <a
-              href="#analytics"
-              className="text-xs font-semibold uppercase tracking-wider text-[#44474c] transition hover:text-[#0a1422]"
+            </Link>
+            <Link
+              href="#how-it-works"
+              className="hover:text-[#1c1c1e] transition-colors"
             >
-              Analytics
-            </a>
-
-            <a
-              href="#pricing"
-              className="text-xs font-semibold uppercase tracking-wider text-[#44474c] transition hover:text-[#0a1422]"
+              How it works
+            </Link>
+            <Link
+              href="/pricing"
+              className="hover:text-[#1c1c1e] transition-colors"
             >
               Pricing
-            </a>
+            </Link>
+            <Link
+              href="/datasets"
+              className="hover:text-[#1c1c1e] transition-colors"
+            >
+              Datasets
+            </Link>
           </nav>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="/docs"
-            className="rounded-lg bg-[#f6f3f4] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0a1422] transition hover:bg-[#e4e2e3]"
-          >
-            Docs
-          </Link>
-
-          <Link
-            href="/signup"
-            className="rounded-lg bg-[#0a1422] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition active:scale-95"
-          >
-            Start Free
-          </Link>
-
-          <div className="ml-3 hidden items-center gap-3 md:flex">
-            <span className="material-symbols-outlined cursor-pointer text-[#44474c]">
-              notifications
-            </span>
-
-            <span className="material-symbols-outlined cursor-pointer text-[#44474c]">
-              help
-            </span>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/login"
+              className="text-sm font-medium text-[#1c1c1e] hover:text-[#636366] transition-colors"
+            >
+              Log in
+            </Link>
+            <Link href="/signup" className="btn-primary text-sm">
+              Start Free
+            </Link>
           </div>
         </div>
       </header>
 
-      <main>
-        {/* Hero */}
-        <section className="mx-auto flex max-w-5xl flex-col items-center px-6 py-32 text-center md:px-12">
-          <span className="mb-6 text-xs font-semibold uppercase tracking-[0.25em] text-[#1b6b4f]">
-            ENTERPRISE AI OPERATING SYSTEM
-          </span>
-
-          <h1 className="mb-8 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#0a1422] md:text-7xl">
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="pt-32 pb-20 px-6 text-center max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f2f2f7] text-sm font-medium text-[#636366] mb-8">
+            <span className="w-2 h-2 rounded-full bg-[#34c759]"></span>
+            Hoolder 2.0 is now available
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[#1c1c1e] mb-6 leading-tight">
             Run your AI company from one operating system.
           </h1>
-
-          <p className="mb-12 max-w-2xl text-lg leading-relaxed text-[#44474c] md:text-xl">
-            Hoolder orchestrates agents, swarms, and human approvals in a
-            unified infrastructure designed for enterprise AI operations.
+          <p className="text-xl text-[#636366] mb-10 max-w-2xl mx-auto leading-relaxed">
+            Create workspaces, deploy agents, organize swarms, and manage tasks,
+            schedules, and billing—all in a beautifully structured,
+            Apple-inspired interface.
           </p>
-
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/signup"
-              className="rounded-full bg-[#0a1422] px-8 py-4 text-sm font-semibold text-white transition active:scale-95"
+              className="btn-primary text-lg w-full sm:w-auto"
             >
               Start Free
+              <svg
+                className="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                ></path>
+              </svg>
             </Link>
-
             <Link
               href="/pricing"
-              className="rounded-full bg-[#f0edee] px-8 py-4 text-sm font-semibold text-[#0a1422] transition hover:bg-[#e4e2e3]"
+              className="btn-secondary text-lg w-full sm:w-auto"
             >
               View Pricing
             </Link>
@@ -98,94 +122,38 @@ export default function HomePage() {
         </section>
 
         {/* Product Preview */}
-        <section className="px-6 pb-32 md:px-12 xl:px-20">
-          <div className="mx-auto max-w-7xl overflow-hidden rounded-[28px] border border-[#c5c6cc] bg-[#f6f3f4] p-8 md:p-12">
-            <div className="grid grid-cols-12 gap-6">
-              {/* Sidebar Mock */}
-              <div className="hidden rounded-2xl border border-[#c5c6cc] bg-white p-6 lg:col-span-3 lg:block">
-                <div className="mb-8 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded bg-[#0a1422]" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[#0a1422]">
-                    Workspace
-                  </span>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="h-3 w-3/4 rounded bg-[#e4e2e3]" />
-                  <div className="h-3 w-1/2 rounded bg-[#e4e2e3]" />
-                  <div className="h-3 w-2/3 rounded bg-[#e4e2e3]" />
-
-                  <div className="pt-4">
-                    <div className="h-8 w-full rounded-lg bg-[#a6f2cf]" />
-                  </div>
-                </div>
+        <section className="px-6 pb-32 max-w-6xl mx-auto">
+          <div className="rounded-2xl border border-[#e5e5ea] bg-white shadow-2xl overflow-hidden">
+            <div className="h-12 bg-[#f5f5f7] border-b border-[#e5e5ea] flex items-center px-4 gap-2">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-[#ff3b30]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#ffcc00]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#34c759]"></div>
               </div>
-
-              {/* Main Preview */}
-              <div className="col-span-12 space-y-6 lg:col-span-9">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {/* Agents */}
-                  <div className="rounded-2xl border border-[#c5c6cc] bg-white p-6">
-                    <div className="mb-4 flex items-start justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#44474c]">
-                        ACTIVE AGENTS
-                      </span>
-
-                      <span className="material-symbols-outlined text-[#1b6b4f]">
-                        memory
-                      </span>
-                    </div>
-
-                    <div className="text-4xl font-bold text-[#0a1422]">
-                      128
-                    </div>
-
-                    <div className="mt-2 text-xs text-[#1b6b4f]">
-                      ↑ 12% vs last week
-                    </div>
+            </div>
+            <div className="p-8 bg-[#fafafa] flex gap-6">
+              <div className="w-48 hidden md:flex flex-col gap-2">
+                <div className="h-8 bg-[#e5e5ea] rounded-lg w-full mb-4"></div>
+                <div className="h-8 bg-white rounded-lg w-full border border-[#e5e5ea]"></div>
+                <div className="h-8 bg-[#e5e5ea] rounded-lg w-3/4"></div>
+                <div className="h-8 bg-[#e5e5ea] rounded-lg w-5/6"></div>
+              </div>
+              <div className="flex-1 flex flex-col gap-6">
+                <div className="flex gap-4">
+                  <div className="flex-1 h-32 bg-white rounded-xl border border-[#e5e5ea] p-4">
+                    <div className="h-4 bg-[#f2f2f7] rounded w-1/3 mb-4"></div>
+                    <div className="h-8 bg-[#34c759]/20 rounded w-1/2"></div>
                   </div>
-
-                  {/* Approvals */}
-                  <div className="rounded-2xl border border-[#c5c6cc] bg-white p-6">
-                    <div className="mb-4 flex items-start justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#44474c]">
-                        APPROVAL QUEUE
-                      </span>
-
-                      <span className="material-symbols-outlined text-[#ba1a1a]">
-                        priority_high
-                      </span>
-                    </div>
-
-                    <div className="text-4xl font-bold text-[#0a1422]">
-                      14
-                    </div>
-
-                    <div className="mt-2 text-xs text-[#44474c]">
-                      3 urgent actions needed
-                    </div>
+                  <div className="flex-1 h-32 bg-white rounded-xl border border-[#e5e5ea] p-4">
+                    <div className="h-4 bg-[#f2f2f7] rounded w-1/3 mb-4"></div>
+                    <div className="h-8 bg-[#e5e5ea] rounded w-1/2"></div>
+                  </div>
+                  <div className="flex-1 h-32 bg-white rounded-xl border border-[#e5e5ea] p-4">
+                    <div className="h-4 bg-[#f2f2f7] rounded w-1/3 mb-4"></div>
+                    <div className="h-8 bg-[#e5e5ea] rounded w-1/2"></div>
                   </div>
                 </div>
-
-                {/* Swarm */}
-                <div className="relative h-64 overflow-hidden rounded-2xl border border-[#c5c6cc] bg-white p-8">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                    <span className="material-symbols-outlined text-[200px]">
-                      hub
-                    </span>
-                  </div>
-
-                  <div className="relative z-10">
-                    <h3 className="mb-2 text-2xl font-semibold text-[#0a1422]">
-                      Swarm Topology
-                    </h3>
-
-                    <p className="text-sm text-[#44474c]">
-                      Visualizing orchestration paths across multiple agent
-                      clusters.
-                    </p>
-                  </div>
-                </div>
+                <div className="h-64 bg-white rounded-xl border border-[#e5e5ea]"></div>
               </div>
             </div>
           </div>
@@ -194,363 +162,316 @@ export default function HomePage() {
         {/* Features */}
         <section
           id="features"
-          className="border-y border-[#c5c6cc] bg-white px-6 py-32 md:px-12 xl:px-20"
+          className="py-32 bg-white border-y border-[#e5e5ea]"
         >
-          <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 gap-16 md:grid-cols-3">
-              {/* Feature 1 */}
-              <div className="space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#a6f2cf]">
-                  <span className="material-symbols-outlined text-[#1b6b4f]">
-                    admin_panel_settings
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-[#0a1422]">
-                  Swarm Governance
-                </h3>
-
-                <p className="leading-relaxed text-[#44474c]">
-                  Control multi-agent systems with permissions, orchestration,
-                  and structured collaboration layers.
-                </p>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1f2937]">
-                  <span className="material-symbols-outlined text-white">
-                    assignment_turned_in
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-[#0a1422]">
-                  Task Management
-                </h3>
-
-                <p className="leading-relaxed text-[#44474c]">
-                  Assign tasks, manage workflows, track approvals and automate
-                  recurring operations.
-                </p>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e4e2e3]">
-                  <span className="material-symbols-outlined text-[#0a1422]">
-                    person_check
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-[#0a1422]">
-                  Human Oversight
-                </h3>
-
-                <p className="leading-relaxed text-[#44474c]">
-                  Keep sensitive AI workflows under human approval and enterprise
-                  review control.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section className="px-6 py-32 md:px-12 xl:px-20">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-20 text-center">
-              <h2 className="text-4xl font-semibold tracking-[-0.03em] text-[#0a1422] md:text-6xl">
-                Orchestration in three steps.
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl font-bold tracking-tight text-[#1c1c1e] mb-4">
+                Everything you need to scale AI.
               </h2>
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              {[
-                {
-                  number: "1",
-                  title: "Configure Agents",
-                  desc: "Define AI workers with skills, memory, prompts and enterprise data access."
-                },
-                {
-                  number: "2",
-                  title: "Execute Missions",
-                  desc: "Launch swarms and recurring workflows across business operations."
-                },
-                {
-                  number: "3",
-                  title: "Analyze & Optimize",
-                  desc: "Track usage, costs, approvals and orchestration performance."
-                }
-              ].map((step) => (
-                <div
-                  key={step.number}
-                  className="relative rounded-3xl bg-[#f0edee] p-8"
-                >
-                  <span className="absolute right-6 top-4 text-6xl font-bold text-[#c5c6cc] opacity-40">
-                    {step.number}
-                  </span>
-
-                  <h4 className="mb-4 text-xl font-bold text-[#0a1422]">
-                    {step.title}
-                  </h4>
-
-                  <p className="text-sm leading-relaxed text-[#44474c]">
-                    {step.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Marketplace */}
-        <section className="bg-[#0a1422] px-6 py-32 text-white md:px-12 xl:px-20">
-          <div className="mx-auto flex max-w-7xl flex-col gap-16 md:flex-row md:items-center">
-            <div className="w-full md:w-1/2">
-              <h2 className="mb-6 text-5xl font-semibold leading-tight tracking-[-0.03em]">
-                Fuel your agents with premium data.
-              </h2>
-
-              <p className="mb-10 max-w-lg text-lg leading-relaxed text-[#bdc7d9]">
-                The Hoolder Dataset Marketplace provides curated enterprise-grade
-                datasets and AI-ready data feeds.
+              <p className="text-xl text-[#636366] max-w-2xl mx-auto">
+                Powerful primitives designed for enterprise workflows.
               </p>
-
-              <Link
-                href="/datasets"
-                className="inline-flex rounded-full bg-white px-8 py-4 font-semibold text-[#0a1422] transition hover:bg-[#a6f2cf]"
-              >
-                Browse Marketplace
-              </Link>
             </div>
-
-            <div className="grid w-full grid-cols-2 gap-4 md:w-1/2">
-              {[
-                "FinData Pro",
-                "LexisAI Core",
-                "BioHelix",
-                "LogiStream"
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-3xl border border-white/10 bg-[#1f2937] p-6"
-                >
-                  <span className="material-symbols-outlined mb-4 text-[#8bd6b4]">
-                    database
-                  </span>
-
-                  <div className="font-bold">{item}</div>
-
-                  <div className="text-sm text-[#bdc7d9]">
-                    Marketplace dataset
-                  </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="card">
+                <div className="w-12 h-12 bg-[#f2f2f7] rounded-xl flex items-center justify-center mb-6">
+                  <svg
+                    className="w-6 h-6 text-[#1c1c1e]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    ></path>
+                  </svg>
                 </div>
-              ))}
+                <h3 className="text-xl font-semibold mb-3">
+                  Workspaces & Companies
+                </h3>
+                <p className="text-[#636366] leading-relaxed">
+                  Isolate data, agents, and billing across different departments
+                  or client projects seamlessly.
+                </p>
+              </div>
+              <div className="card">
+                <div className="w-12 h-12 bg-[#f2f2f7] rounded-xl flex items-center justify-center mb-6">
+                  <svg
+                    className="w-6 h-6 text-[#1c1c1e]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Agents & Swarms</h3>
+                <p className="text-[#636366] leading-relaxed">
+                  Deploy specialized agents and group them into swarms to tackle
+                  complex, multi-step objectives.
+                </p>
+              </div>
+              <div className="card">
+                <div className="w-12 h-12 bg-[#f2f2f7] rounded-xl flex items-center justify-center mb-6">
+                  <svg
+                    className="w-6 h-6 text-[#1c1c1e]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Approvals & Safety
+                </h3>
+                <p className="text-[#636366] leading-relaxed">
+                  Keep humans in the loop. Require explicit approval before
+                  agents execute high-stakes actions.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Pricing */}
-        <section
-          id="pricing"
-          className="px-6 py-32 md:px-12 xl:px-20"
-        >
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-16 text-center">
-              <h2 className="text-4xl font-semibold tracking-[-0.03em] text-[#0a1422] md:text-6xl">
-                Scalable architecture for every stage.
+        {/* Usage Protection */}
+        <section className="py-32 bg-[#fafafa]">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
+            <div className="flex-1">
+              <h2 className="text-4xl font-bold tracking-tight text-[#1c1c1e] mb-6">
+                Never worry about runaway costs.
               </h2>
+              <p className="text-xl text-[#636366] mb-8 leading-relaxed">
+                Hoolder automatically blocks excessive usage. Set hard limits on
+                tokens, tasks, and budgets per agent or workspace. Sleep
+                peacefully knowing your AI won't drain your bank account.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3 text-[#1c1c1e] font-medium">
+                  <svg
+                    className="w-5 h-5 text-[#34c759]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Automatic limit blocking
+                </li>
+                <li className="flex items-center gap-3 text-[#1c1c1e] font-medium">
+                  <svg
+                    className="w-5 h-5 text-[#34c759]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Real-time cost estimation
+                </li>
+                <li className="flex items-center gap-3 text-[#1c1c1e] font-medium">
+                  <svg
+                    className="w-5 h-5 text-[#34c759]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Bring your own keys (BYOK)
+                </li>
+              </ul>
             </div>
-
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
-              {/* Startup */}
-              <div className="rounded-[32px] border border-[#c5c6cc] bg-white p-12 transition hover:border-[#0a1422]">
-                <div className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#44474c]">
-                  STARTUP
+            <div className="flex-1 w-full">
+              <div className="card">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="font-semibold">Monthly Budget</h4>
+                  <span className="text-[#8e8e93] text-sm">68% used</span>
                 </div>
-
-                <div className="mb-6 text-5xl font-bold text-[#0a1422]">
-                  ₹999
-                  <span className="text-lg font-normal text-[#44474c]">
-                    /mo
-                  </span>
+                <div className="w-full bg-[#f2f2f7] rounded-full h-3 mb-2">
+                  <div
+                    className="bg-[#34c759] h-3 rounded-full"
+                    style={{
+                      width: '68%',
+                    }}
+                  ></div>
                 </div>
-
-                <ul className="mb-10 space-y-4">
-                  {[
-                    "10 Active Swarms",
-                    "Unlimited Human Approvals",
-                    "Marketplace Access"
-                  ].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-center gap-3 text-[#44474c]"
-                    >
-                      <span className="material-symbols-outlined text-sm text-[#1b6b4f]">
-                        check_circle
-                      </span>
-
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/signup"
-                  className="flex w-full items-center justify-center rounded-2xl border-2 border-[#0a1422] py-4 font-semibold text-[#0a1422] transition hover:bg-[#0a1422] hover:text-white"
-                >
-                  Get Started
-                </Link>
-              </div>
-
-              {/* Enterprise */}
-              <div className="rounded-[32px] border border-[#c5c6cc] bg-[#f0edee] p-12">
-                <div className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#1b6b4f]">
-                  ENTERPRISE
+                <div className="flex justify-between text-sm text-[#636366] mt-4">
+                  <span>$42.80 spent</span>
+                  <span>$100.00 limit</span>
                 </div>
-
-                <div className="mb-6 text-5xl font-bold text-[#0a1422]">
-                  Custom
-                </div>
-
-                <ul className="mb-10 space-y-4">
-                  {[
-                    "Dedicated GPU Clusters",
-                    "Private Deployment",
-                    "24/7 AI Architecture Support"
-                  ].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-center gap-3 text-[#44474c]"
-                    >
-                      <span className="material-symbols-outlined text-sm text-[#1b6b4f]">
-                        check_circle
-                      </span>
-
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/contact"
-                  className="flex w-full items-center justify-center rounded-2xl bg-[#0a1422] py-4 font-semibold text-white transition hover:opacity-90"
-                >
-                  Contact Sales
-                </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="bg-[#f6f3f4] px-6 py-32 md:px-12 xl:px-20">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="mb-12 text-center text-4xl font-semibold text-[#0a1422]">
-              Frequently Asked Questions
+        {/* Dataset Marketplace Preview */}
+        <section className="py-32 bg-white border-y border-[#e5e5ea]">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2 className="text-4xl font-bold tracking-tight text-[#1c1c1e] mb-6">
+              Monetize your data.
             </h2>
-
-            <div className="space-y-8">
-              {[
-                {
-                  q: "How secure is company data?",
-                  a: "All data is encrypted in transit and at rest with enterprise-grade infrastructure."
-                },
-                {
-                  q: "Can I customize agent behavior?",
-                  a: "Yes. Agents support prompts, memory, provider selection and structured orchestration."
-                },
-                {
-                  q: "How does billing work?",
-                  a: "Users can either use platform-managed AI billing or bring their own provider API keys."
-                }
-              ].map((faq) => (
-                <div
-                  key={faq.q}
-                  className="border-b border-[#c5c6cc] pb-6"
-                >
-                  <h4 className="mb-2 text-lg font-bold text-[#0a1422]">
-                    {faq.q}
-                  </h4>
-
-                  <p className="text-sm leading-relaxed text-[#44474c]">
-                    {faq.a}
+            <p className="text-xl text-[#636366] mb-12 max-w-2xl mx-auto">
+              Buy high-quality datasets to train your agents, or sell your
+              proprietary data on the Hoolder Marketplace.
+            </p>
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
+              <div className="card flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="badge badge-gray">Finance</span>
+                    <span className="font-semibold text-lg">₹4,999</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Q3 Earnings Call Transcripts
+                  </h3>
+                  <p className="text-[#636366] text-sm mb-6">
+                    Cleaned, structured transcripts from top 500 S&P companies.
                   </p>
                 </div>
-              ))}
+                <button className="btn-secondary w-full">View Dataset</button>
+              </div>
+              <div className="card flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="badge badge-gray">Support</span>
+                    <span className="font-semibold text-lg">₹2,499</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    SaaS Customer Support Logs
+                  </h3>
+                  <p className="text-[#636366] text-sm mb-6">
+                    10k+ anonymized support tickets with resolution steps.
+                  </p>
+                </div>
+                <button className="btn-secondary w-full">View Dataset</button>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#c5c6cc] bg-white px-6 py-20 md:px-12 xl:px-20">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-4">
-          <div className="md:col-span-2">
-            <h2 className="mb-4 text-2xl font-bold text-[#0a1422]">
-              Hoolder
-            </h2>
-
-            <p className="mb-6 max-w-sm leading-relaxed text-[#44474c]">
-              Building infrastructure for autonomous enterprise intelligence.
+      <footer className="bg-[#fafafa] border-t border-[#e5e5ea] py-12">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-6 h-6 bg-[#1c1c1e] rounded flex items-center justify-center">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" />
+                  <path
+                    d="M2 17L12 22L22 17"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M2 12L12 17L22 12"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <span className="font-semibold tracking-tight">Hoolder</span>
+            </div>
+            <p className="text-sm text-[#636366]">
+              The operating system for AI companies.
             </p>
           </div>
-
           <div>
-            <h5 className="mb-6 text-xs font-semibold uppercase tracking-wider text-[#0a1422]">
-              Product
-            </h5>
-
-            <ul className="space-y-4 text-sm text-[#44474c]">
+            <h4 className="font-semibold mb-4">Product</h4>
+            <ul className="space-y-3 text-sm text-[#636366]">
               <li>
-                <Link href="/agents">Agents</Link>
+                <Link href="/pricing" className="hover:text-[#1c1c1e]">
+                  Pricing
+                </Link>
               </li>
-
               <li>
-                <Link href="/swarms">Swarms</Link>
+                <Link href="/datasets" className="hover:text-[#1c1c1e]">
+                  Datasets
+                </Link>
               </li>
-
               <li>
-                <Link href="/datasets">Marketplace</Link>
-              </li>
-
-              <li>
-                <Link href="/usage">Usage</Link>
+                <Link href="/builder" className="hover:text-[#1c1c1e]">
+                  Builder
+                </Link>
               </li>
             </ul>
           </div>
-
           <div>
-            <h5 className="mb-6 text-xs font-semibold uppercase tracking-wider text-[#0a1422]">
-              Company
-            </h5>
-
-            <ul className="space-y-4 text-sm text-[#44474c]">
+            <h4 className="font-semibold mb-4">Legal</h4>
+            <ul className="space-y-3 text-sm text-[#636366]">
               <li>
-                <Link href="/pricing">Pricing</Link>
+                <Link href="/privacy" className="hover:text-[#1c1c1e]">
+                  Privacy Policy
+                </Link>
               </li>
-
               <li>
-                <Link href="/billing">Billing</Link>
+                <Link href="/terms" className="hover:text-[#1c1c1e]">
+                  Terms of Service
+                </Link>
               </li>
-
               <li>
-                <Link href="/team">Team</Link>
+                <Link href="/refund" className="hover:text-[#1c1c1e]">
+                  Refund Policy
+                </Link>
               </li>
-
               <li>
-                <Link href="/privacy">Privacy</Link>
+                <Link href="/ai-policy" className="hover:text-[#1c1c1e]">
+                  AI Policy
+                </Link>
               </li>
             </ul>
           </div>
         </div>
-
-        <div className="mx-auto mt-20 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-[#c5c6cc] pt-8 text-xs text-[#44474c] md:flex-row">
-          <p>© 2026 Hoolder AI Operating System. All rights reserved.</p>
-
-          <p>Designed for enterprise AI operations.</p>
+        <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-[#e5e5ea] text-sm text-[#8e8e93] flex justify-between items-center">
+          <p>© 2026 Hoolder Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>
-  );
+  )
 }
