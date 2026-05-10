@@ -29,13 +29,17 @@ export default function Sidebar() {
         <div className="w-8 h-8 bg-[#1c1c1e] rounded-lg flex items-center justify-center">
           <span className="text-white text-sm font-semibold">H</span>
         </div>
-        <span className="font-semibold text-lg tracking-tight">Hoolder</span>
+
+        <span className="font-semibold text-lg tracking-tight">
+          Hoolder
+        </span>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         {NAV_LINKS.map((link) => {
           const isActive =
-            pathname === link.href || pathname?.startsWith(`${link.href}/`);
+            pathname === link.href ||
+            pathname?.startsWith(`${link.href}/`);
 
           return (
             <Link
@@ -58,9 +62,15 @@ export default function Sidebar() {
           <div className="w-8 h-8 rounded-full bg-[#e5e5ea] flex items-center justify-center text-sm font-medium text-[#636366]">
             JD
           </div>
+
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-[#1c1c1e]">John Doe</span>
-            <span className="text-xs text-[#8e8e93]">Admin</span>
+            <span className="text-sm font-medium text-[#1c1c1e]">
+              John Doe
+            </span>
+
+            <span className="text-xs text-[#8e8e93]">
+              Admin
+            </span>
           </div>
         </div>
       </div>
