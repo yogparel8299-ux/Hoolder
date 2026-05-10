@@ -1,52 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   body {
     @apply bg-[#fafafa] text-[#1c1c1e] antialiased;
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
   }
 }
+
 @layer components {
   .card {
     @apply bg-white rounded-2xl border border-[#e5e5ea] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6;
   }
+
   .btn-primary {
     @apply bg-[#34c759] hover:bg-[#2eb350] text-white font-medium py-2.5 px-5 rounded-xl transition-colors inline-flex items-center justify-center;
   }
+
   .btn-secondary {
     @apply bg-[#f2f2f7] hover:bg-[#e5e5ea] text-[#1c1c1e] font-medium py-2.5 px-5 rounded-xl transition-colors inline-flex items-center justify-center;
   }
+
   .btn-outline {
     @apply bg-transparent border border-[#e5e5ea] hover:bg-[#f5f5f7] text-[#1c1c1e] font-medium py-2.5 px-5 rounded-xl transition-colors inline-flex items-center justify-center;
   }
+
   .input-field {
     @apply w-full bg-[#f5f5f7] border border-transparent focus:border-[#34c759] focus:bg-white focus:ring-4 focus:ring-[#34c759]/10 rounded-xl px-4 py-3 text-[#1c1c1e] placeholder-[#8e8e93] outline-none transition-all;
   }
+
   .label {
     @apply block text-sm font-medium text-[#636366] mb-1.5;
   }
+
   .badge {
     @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
   }
+
   .badge-green {
     @apply bg-[#34c759]/10 text-[#34c759];
   }
+
   .badge-gray {
     @apply bg-[#f2f2f7] text-[#636366];
   }
+
   .table-container {
     @apply w-full overflow-x-auto rounded-2xl border border-[#e5e5ea] bg-white;
   }
+
   .table-base {
     @apply w-full text-left border-collapse;
   }
+
   .table-th {
     @apply px-6 py-4 text-sm font-medium text-[#8e8e93] border-b border-[#e5e5ea] bg-[#fafafa]/50;
   }
+
   .table-td {
     @apply px-6 py-4 text-sm text-[#1c1c1e] border-b border-[#e5e5ea];
   }
+
   .table-tr {
     @apply hover:bg-[#f5f5f7]/50 transition-colors;
   }
