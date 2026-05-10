@@ -1,50 +1,73 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
-  ["Dashboard", "/dashboard"],
-  ["Builder", "/builder"],
-  ["Companies", "/companies"],
-  ["Agents", "/agents"],
-  ["Tasks", "/tasks"],
-  ["Schedules", "/schedules"],
-  ["Swarms", "/swarms"],
-  ["Approvals", "/approvals"],
-  ["Datasets", "/datasets"],
-  ["Team", "/team"],
-  ["Usage", "/usage"],
-  ["Billing", "/billing"],
-  ["Settings", "/settings"],
-  ["Pricing", "/pricing"]
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/builder", label: "Builder" },
+  { href: "/companies", label: "Companies" },
+  { href: "/agents", label: "Agents" },
+  { href: "/tasks", label: "Tasks" },
+  { href: "/schedules", label: "Schedules" },
+  { href: "/swarms", label: "Swarms" },
+  { href: "/approvals", label: "Approvals" },
+  { href: "/datasets", label: "Datasets" },
+  { href: "/team", label: "Team" },
+  { href: "/usage", label: "Usage" },
+  { href: "/billing", label: "Billing" },
+  { href: "/settings", label: "Settings" },
+  { href: "/pricing", label: "Pricing" },
 ];
 
-export function Sidebar() {
+export default function Sidebar() {
+  const pathname = usePathname();
   return (
-    <>
-      <aside className="sidebar desktop-sidebar">
-        <div className="brand">
-          <div className="brand-mark" />
-          <div>
-            <div className="brand-title">Hoolder</div>
-            <div className="brand-subtitle">AI company OS</div>
-          </div>
-        </div>
-
-        <nav className="nav">
-          {links.map(([label, href]) => (
-            <Link key={href} href={href} className="nav-link">
-              {label}
+    <aside className="sidebar">
+      <Link
+        href="/dashboard"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "6px 12px 18px 12px",
+          fontWeight: 600,
+          fontSize: 18,
+          letterSpacing: "-0.01em",
+        }}
+      >
+        <span
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 8,
+            background: "#1c1c1e",
+            color: "#fff",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+        >
+          H
+        </span>
+        Hoolder
+      </Link>
+      <nav>
+        {links.map((l) => {
+          const active = pathname === l.href || pathname?.startsWith(l.href + "/");
+          return (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`sidebar-link${active ? " active" : ""}`}
+            >
+              {l.label}
             </Link>
-          ))}
-        </nav>
-      </aside>
-
-      <div className="mobile-nav">
-        <Link href="/dashboard">Home</Link>
-        <Link href="/agents">Agents</Link>
-        <Link href="/tasks">Tasks</Link>
-        <Link href="/swarms">Swarms</Link>
-        <Link href="/pricing">Pricing</Link>
-      </div>
-    </>
+          );
+        })}
+      </nav>
+    </aside>
   );
 }
