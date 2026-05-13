@@ -1,20 +1,20 @@
-import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "../components/shell/sidebar";
 
-export const metadata = {
-  title: "Hoolder - AI Company Operating System",
-  description: "Run your AI company from one operating system."
+export const metadata: Metadata = {
+  title: "Hoolder — AI Company Operating System",
+  description:
+    "Run your AI company from one operating system. Manage agents, swarms, tasks, datasets, billing, usage and approvals."
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body>
-        <div className="min-h-screen bg-[#fafafa] text-[#1c1c1e]">
-          {children}
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
