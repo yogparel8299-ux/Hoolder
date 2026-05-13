@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAV_LINKS = [
+const links = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Builder", href: "/builder" },
   { name: "Companies", href: "/companies" },
@@ -24,54 +24,138 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex w-64 bg-[#f5f5f7] border-r border-[#e5e5ea] flex-col min-h-screen sticky top-0">
-      <div className="p-6 flex items-center gap-2">
-        <div className="w-8 h-8 bg-[#1c1c1e] rounded-lg flex items-center justify-center">
-          <span className="text-white text-sm font-semibold">H</span>
+    <aside className="sidebar">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 34,
+          padding: "0 10px"
+        }}
+      >
+        <div
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 14,
+            background: "var(--accent)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 900,
+            color: "#10220d",
+            fontSize: 18
+          }}
+        >
+          H
         </div>
 
-        <span className="font-semibold text-lg tracking-tight">
-          Hoolder
-        </span>
+        <div>
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: 850,
+              letterSpacing: "-0.04em"
+            }}
+          >
+            Hoolder
+          </div>
+
+          <div
+            style={{
+              fontSize: 12,
+              color: "var(--muted)"
+            }}
+          >
+            AI Company OS
+          </div>
+        </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        {NAV_LINKS.map((link) => {
-          const isActive =
+      <nav>
+        {links.map((link) => {
+          const active =
             pathname === link.href ||
             pathname?.startsWith(`${link.href}/`);
 
           return (
             <Link
-              key={link.name}
+              key={link.href}
               href={link.href}
-              className={`flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-white text-[#1c1c1e] shadow-sm border border-[#e5e5ea]"
-                  : "text-[#636366] hover:bg-[#e5e5ea]/50 hover:text-[#1c1c1e]"
-              }`}
+              className={`sidebar-link ${active ? "active" : ""}`}
             >
-              {link.name}
+              <span>{link.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-[#e5e5ea]">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-8 h-8 rounded-full bg-[#e5e5ea] flex items-center justify-center text-sm font-medium text-[#636366]">
-            JD
+      <div
+        style={{
+          marginTop: 40,
+          padding: 14,
+          borderRadius: 24,
+          background: "white",
+          border: "1px solid var(--border)"
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12
+          }}
+        >
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 999,
+              background: "#eef1ef",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 800
+            }}
+          >
+            CF
           </div>
 
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-[#1c1c1e]">
-              John Doe
-            </span>
+          <div>
+            <div
+              style={{
+                fontWeight: 800,
+                fontSize: 14
+              }}
+            >
+              Caelum Fly
+            </div>
 
-            <span className="text-xs text-[#8e8e93]">
-              Admin
-            </span>
+            <div
+              style={{
+                fontSize: 12,
+                color: "var(--muted)"
+              }}
+            >
+              Founder
+            </div>
           </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: 18,
+            padding: "10px 12px",
+            borderRadius: 16,
+            background: "rgba(185,255,61,0.18)",
+            border: "1px solid rgba(185,255,61,0.45)",
+            fontSize: 12,
+            fontWeight: 800,
+            color: "#23400f"
+          }}
+        >
+          PRO PLAN ACTIVE
         </div>
       </div>
     </aside>
